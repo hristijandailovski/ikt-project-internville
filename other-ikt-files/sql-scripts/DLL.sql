@@ -91,3 +91,50 @@ create table EDUCATIONAL_INSTITUTE(
                                       FOREIGN KEY (country_id) REFERENCES COUNTRY(id)
                                           ON DELETE SET NULL ON UPDATE CASCADE
 );
+
+create table COUNTRY(
+                        id      serial      PRIMARY KEY,
+                        name    varchar(50) UNIQUE    NOT NULL
+);
+create table END_USER(
+                         id              serial         PRIMARY KEY,
+                         username        varchar(20)     UNIQUE,
+                         password        varchar(20),
+                         name            varchar(20),
+                         surname         varchar(20),
+                         date_of_birth   date,
+                         address         address,
+                         phone_number    phone,
+                         email_address   email,
+                         country_id      integer,
+                         FOREIGN KEY (country_id) REFERENCES COUNTRY (id)
+                             ON DELETE SET NULL ON UPDATE CASCADE
+);
+create table ORGANIZATION (
+                              id              serial     PRIMARY KEY,
+                              name            varchar(50),
+                              phone_number    phone,
+                              email_address   email,
+                              address         address,
+                              country_id      integer,
+                              FOREIGN KEY (country_id) REFERENCES COUNTRY(id)
+                                  ON DELETE SET NULL ON UPDATE CASCADE
+);
+create table COMMITTEE(
+                          id              serial     PRIMARY KEY,
+                          phone_number    phone,
+                          email_address   email,
+                          address         address,
+                          country_id      integer,
+                          org_id          integer     NOT NULL,
+                          FOREIGN KEY (country_id) REFERENCES COUNTRY(id)
+                              ON DELETE SET NULL ON UPDATE CASCADE,
+                          FOREIGN KEY (org_id) REFERENCES ORGANIZATION(id)
+
+);
+create table MEMBER(
+                       id      integer     PRIMARY KEY,
+                       FOREIGN KEY (id) REFERENCES END_USER(id)
+                           ON  DELETE CASCADE ON UPDATE CASCADE
+);
+
