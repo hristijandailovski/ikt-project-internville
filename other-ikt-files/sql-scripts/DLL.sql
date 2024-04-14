@@ -22,3 +22,72 @@ alter domain ikt_project.app_status add constraint app_status_check
     check ((VALUE)::text ~'^(applied|accepted|rejected|ongoing|completed)$'::text);
 --WARNING: uncomment following line only when you must to delete and drop the schema.
 -- drop schema nbp_project cascade ;
+
+
+create table major(
+                      id  int     primary key ,
+                      major varchar(50)
+);
+create table STUDENT(
+                        id      integer     PRIMARY KEY,
+                        FOREIGN KEY (id) REFERENCES END_USER(id)
+                            ON  DELETE CASCADE ON UPDATE CASCADE
+);
+create table LANGUAGE(
+                         id      serial     PRIMARY KEY,
+                         name    varchar(30) NOT NULL,
+                         code    varchar(10) NOT NULL
+);
+create table KNOWS_LANGUAGE(
+                               student_id  integer,
+                               lang_id     integer,
+                               level       lang_level      NOT NULL,
+                               PRIMARY KEY (student_id,lang_id),
+                               FOREIGN KEY (student_id) REFERENCES STUDENT(id)
+                                   ON DELETE CASCADE ON UPDATE CASCADE,
+                               FOREIGN KEY (lang_id) REFERENCES LANGUAGE(id)
+                                   ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+create table EXPERIENCE(
+                           id                  serial         PRIMARY KEY,
+                           type_of_job         job,
+                           description         varchar(1024),
+                           start_year          date,
+                           duration_in_weeks   pos_int,
+                           student_id          integer     NOT NULL,
+                           FOREIGN KEY (student_id) REFERENCES STUDENT(id)
+                               ON DELETE CASCADE ON UPDATE CASCADE
+);
+create table CERTIFICATE(
+                            id                  serial     PRIMARY KEY,
+                            name                varchar(30),
+                            description         varchar(1024),
+                            date_of_issue       date,
+                            publisher           varchar(30),
+                            student_id          integer     NOT NULL,
+                            FOREIGN KEY (student_id) REFERENCES STUDENT(id)
+                                ON DELETE CASCADE ON UPDATE CASCADE
+);
+create table PROJECT(
+                        id                  serial         PRIMARY KEY,
+                        name                varchar(50),
+                        description         varchar(1024),
+                        completeness        percent         DEFAULT '0',
+                        student_id          integer         NOT NULL,
+                        FOREIGN KEY (student_id) REFERENCES STUDENT(id)
+                            ON DELETE CASCADE ON UPDATE CASCADE
+);
+create table EDUCATIONAL_INSTITUTE(
+                                      id              serial     PRIMARY KEY,
+                                      name            varchar(50),
+                                      phone_number    phone,
+                                      email_address   email,
+                                      address         address,
+                                      superior_id     integer,
+                                      country_id      integer,
+                                      FOREIGN KEY (superior_id) REFERENCES EDUCATIONAL_INSTITUTE (id)
+                                          ON DELETE SET NULL ON UPDATE CASCADE,
+                                      FOREIGN KEY (country_id) REFERENCES COUNTRY(id)
+                                          ON DELETE SET NULL ON UPDATE CASCADE
+);
