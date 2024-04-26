@@ -1,12 +1,8 @@
-package mk.ukim.finki.nbp.aplipraksa.model;
+package finki.ikt.tim1.internville.model;
 
 import lombok.Data;
-import mk.ukim.finki.nbp.aplipraksa.model.enumerations.JobType;
-
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 @Data
 public class Certificate {
