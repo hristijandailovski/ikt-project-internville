@@ -55,7 +55,7 @@ public class OfferDetailView {
                 rs.getString("acc_email"),
                 rs.getString("acc_address"),
                 rs.getString("acc_description")
-        );}*/
+        );*/
 
 
 }
