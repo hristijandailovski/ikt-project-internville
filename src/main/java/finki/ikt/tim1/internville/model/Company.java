@@ -20,7 +20,7 @@ public class Company {
         this.numberOfEmployees = numberOfEmployees;
     }
 
-    public static Company mapRowToApplicant(ResultSet rs, int rowNumber) throws SQLException{
+    public static Company mapCompanyInformation(ResultSet rs) throws SQLException{
         return new Company(
                 rs.getString("name"),
                 Integer.parseInt(rs.getString("phone_number")),
