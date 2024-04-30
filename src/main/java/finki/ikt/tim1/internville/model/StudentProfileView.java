@@ -1,7 +1,6 @@
-package mk.ukim.finki.nbp.aplipraksa.model;
+package finki.ikt.tim1.internville.model;
 
 import lombok.Data;
-import mk.ukim.finki.nbp.aplipraksa.model.enumerations.StudyType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
