@@ -1,4 +1,4 @@
-package mk.ukim.finki.nbp.aplipraksa.model;
+package finki.ikt.tim1.internville.model;
 
 import lombok.Data;
 

@@ -1,5 +1,6 @@
-package mk.ukim.finki.nbp.aplipraksa.repository;
-import mk.ukim.finki.nbp.aplipraksa.model.*;
+package finki.ikt.tim1.internville.repository;
+
+import finki.ikt.tim1.internville.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

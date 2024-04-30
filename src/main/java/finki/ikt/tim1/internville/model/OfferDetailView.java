@@ -1,6 +1,9 @@
 package finki.ikt.tim1.internville.model;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class OfferDetailView {
     private Integer offerId;
     private String countryName;
@@ -38,6 +41,23 @@ public class OfferDetailView {
         this.accDescription = accDescription;
     }
 
-
-
+    public static OfferEditView mapRowToOfferDetailView(ResultSet rs, int rowNum) throws SQLException {
+        return new OfferEditView(
+                Integer.parseInt(rs.getString("offer_id")),
+                rs.getString("country_name"),
+                rs.getString("company_name"),
+                rs.getString("company_address"),
+                rs.getString("requirements"),
+                rs.getString("responsibilities"),
+                rs.getString("benefits"),
+                rs.getString("salary"),
+                rs.getString("field"),
+                rs.getString("start_date"),
+                rs.getString("duration_in_weeks"),
+                rs.getString("acc_phone"),
+                rs.getString("acc_email"),
+                rs.getString("acc_address"),
+                rs.getString("acc_description")
+        );
+    }
 }
