@@ -138,3 +138,84 @@ create table MEMBER(
                            ON  DELETE CASCADE ON UPDATE CASCADE
 );
 
+
+create table acceptance_status (
+                                   id      int         primary key,
+                                   status  varchar(20)
+);
+
+create table COMPANY(
+                        id                      serial     PRIMARY KEY,
+                        name                    varchar(30),
+                        phone_number            phone,
+                        email_address           email,
+                        address                 address,
+                        country_id              integer,
+                        number_of_employees     pos_int,
+                        FOREIGN KEY (country_id) REFERENCES COUNTRY(id)
+                            ON DELETE SET NULL ON UPDATE CASCADE
+
+);
+create table OFFER(
+                      id                  serial     PRIMARY KEY,
+                      requirements        varchar(500),
+                      responsibilities    varchar(500),
+                      benefits            varchar(500),
+                      salary              pos_int,
+                      field               varchar(50),
+                      start_date          date,
+                      duration_in_weeks   pos_int,
+                      member_id           integer     NOT NULL,
+                      company_id          integer,
+                      FOREIGN KEY (member_id) REFERENCES MEMBER(id)
+                          ON DELETE SET NULL ON UPDATE CASCADE,
+                      FOREIGN KEY (company_id) REFERENCES COMPANY(id)
+                          ON DELETE SET NULL ON UPDATE CASCADE
+);
+create table ACCOMMODATION(
+                              id          serial     PRIMARY KEY ,
+                              phone_number            phone,
+                              email_address           email,
+                              address                 address,
+                              country_id              integer,
+                              start_date              date,
+                              end_date                date,
+                              type                    varchar(30),
+                              description             varchar(500),
+                              offer_id                integer     NOT NULL,
+                              FOREIGN KEY (country_id) REFERENCES COUNTRY(id)
+                                  ON DELETE SET NULL ON UPDATE CASCADE,
+                              FOREIGN KEY (offer_id) REFERENCES OFFER(id)
+                                  ON DELETE SET NULL ON UPDATE CASCADE,
+                              CHECK (start_date < end_date)
+);
+
+create table APPLIES_FOR(
+                            student_id                      integer,
+                            offer_id                        integer,
+                            acceptance_status               app_status,
+                            date_of_app_submission          date,
+                            PRIMARY KEY (student_id,offer_id),
+                            FOREIGN KEY (student_id) REFERENCES STUDENT(id)
+                                ON DELETE SET NULL  ON UPDATE CASCADE,
+                            FOREIGN KEY (offer_id) REFERENCES OFFER(id)
+                                ON DELETE SET NULL  ON UPDATE CASCADE
+
+);
+
+create table INTERNSHIP(
+                           id      serial     PRIMARY KEY ,
+                           grade_work  grade,
+                           grade_accommodation     grade,
+                           grade_student           grade,
+                           comment_student         varchar(500),
+                           comment_company         varchar(500),
+                           duration_in_weeks       pos_int,
+                           salary                  pos_int,
+                           bonus_pay               pos_int,
+                           applies_for_student_id  integer,
+                           applies_for_offer_id    integer,
+                           FOREIGN KEY (applies_for_student_id,applies_for_offer_id) REFERENCES APPLIES_FOR (student_id,offer_id)
+                               ON DELETE SET NULL ON UPDATE CASCADE
+);
+
