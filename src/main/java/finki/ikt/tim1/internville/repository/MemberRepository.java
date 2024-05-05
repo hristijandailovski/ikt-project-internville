@@ -17,7 +17,8 @@ public class MemberRepository {
         this.jdbc = jdbcTemplate;
     }
 
-    public void createMember(String memberId,
+    public void createMember(Integer memberId,
+                             Integer committeeId,
                              String username,
                              String password,
                              String name,
@@ -28,12 +29,13 @@ public class MemberRepository {
                              String email,
                              Integer countryId,
                              Integer organizationId,
-                             Integer committeeId) {
-        jdbc.update("call ikt_project.insert_end_user_member(?,?,?,?,?,?,?,?,?,?,?,?)",
-                memberId, username, password, name, surname, dateOfBirth, address, phoneNumber, email, countryId, organizationId, committeeId);
+                             Integer committeeCountryId) {
+        jdbc.update("call ikt_project.insert_end_user_member(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                memberId, committeeId, username, password, name, surname, dateOfBirth, address, phoneNumber, email, countryId, organizationId, committeeCountryId);
     }
 
-    public void editMember(String memberId,
+    public void editMember(Integer memberId,
+                           Integer committeeId,
                            String username,
                            String password,
                            String name,
@@ -44,9 +46,9 @@ public class MemberRepository {
                            String email,
                            Integer countryId,
                            Integer organizationId,
-                           Integer committeeId) {
-        jdbc.update("call ikt_project.edit_end_user_member(?,?,?,?,?,?,?,?,?,?,?,?)",
-                memberId, username, password, name, surname, dateOfBirth, address, phoneNumber, email, countryId, organizationId, committeeId);
+                           Integer committeeCountryId) {
+        jdbc.update("call ikt_project.insert_end_user_member(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                memberId, committeeId, username, password, name, surname, dateOfBirth, address, phoneNumber, email, countryId, organizationId, committeeCountryId);
     }
 
     public void deleteMember(String memberId){
