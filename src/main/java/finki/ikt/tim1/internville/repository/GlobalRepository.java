@@ -29,7 +29,7 @@ public class GlobalRepository {
         return jdbc.query("select * from ikt_project.active_offers(?)", OfferShortView::mapRowToOfferView,pageNumber);
     }
     public Iterable<CompanyView> findAllCompaniesViewOnPage(Integer pageNumber){
-        return jdbc.query("select * from ikt_project.companies_view_on_page(?)",CompanyView::mapCompanyInformation,pageNumber);
+        return jdbc.query("select * from ikt_project.companies_view_on_page(?)",CompanyView::mapRowToCompanyView,pageNumber);
     }
 
     public Offer findOfferById(Integer id) {
@@ -37,7 +37,7 @@ public class GlobalRepository {
     }
 
     public Iterable<Company> findAllCompanies() {
-        return jdbc.query("select * from ikt_project.company",Company::mapCompanyInformation);
+        return jdbc.query("select * from ikt_project.company",Company::mapRowToCompany);
     }
 
     public UserCredentials findUserCredentialsByUserNameAndPassword(String username, String password) {

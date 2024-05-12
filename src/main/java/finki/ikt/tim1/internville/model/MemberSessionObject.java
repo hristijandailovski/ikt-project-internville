@@ -2,6 +2,9 @@ package finki.ikt.tim1.internville.model;
 
 import lombok.Data;
 
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 @Data
@@ -17,7 +20,7 @@ public class MemberSessionObject {
     private Integer memCountryId;
     private Integer organizationId;
 
-    public MemberSessionObject(String username, String email, String password, String name,String surname, LocalDate dateOfBirth, String address, String phone, Integer memCountryId, Integer organizationId) {
+    public MemberSessionObject(String username, String email, String password, String name, String surname, LocalDate dateOfBirth, String address, String phone, Integer memCountryId, Integer organizationId) {
         this.username = username;
         this.email = email;
         this.password = password;

@@ -20,7 +20,7 @@ public class CompanyView {
         this.numberOfEmployees = numberOfEmployees;
     }
 
-    public static CompanyView mapCompanyInformation(ResultSet rs, int rowNumber) throws SQLException{
+    public static CompanyView mapRowToCompanyView(ResultSet rs, int rowNumber) throws SQLException{
         return new CompanyView(
                 rs.getString("name"),
                 Integer.parseInt(rs.getString("phone_number")),
