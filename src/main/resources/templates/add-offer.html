@@ -1,0 +1,59 @@
+
+<!--<h1 class="text-center">Create an offer</h1>-->
+<div class="container p-3">
+    <h1 class="text-center">Create an offer</h1>
+<!--    <h4>Company: Bla bla</h4>-->
+    <form method="post" th:action="@{/offers/add-offer}">
+        <div class="form-group">
+            <label for="company-id">Company:</label>
+            <select id="company-id" name="company-id" class="form-control">
+                <option th:each="com: ${companies}" th:value="${com.getId()}" th:text="${com.getName()}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="field">Field of study:</label>
+            <input type="text" id="field" name="field" value="" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="requirements">Requirements:</label>
+            <input type="text" id="requirements" name="requirements" value="" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="responsibilities">Responsibilities:</label>
+            <input type="text" id="responsibilities" name="responsibilities" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="benefits">Benefits:</label>
+            <input type="text" id="benefits" name="benefits" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="salary">Salary:</label>
+            <input type="number" id="salary" name="salary" value="0" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="start-date">Start date:</label>
+            <input type="date" id="start-date" name="start-date" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="duration">Duration (in weeks):</label>
+            <input type="number" id="duration" name="duration" value="0" class="form-control">
+        </div>
+
+<!--        <div class="form-group">-->
+<!--            <label for="field8">Select company:</label>-->
+<!--            <input type="text" id="field8" name="field8" class="form-control">-->
+<!--        </div>-->
+
+        <a  class="btn btn-info" href="/offers">&lt; Back</a>
+        <button type="submit" class="btn btn-success">Submit</button>
+
+    </form>
+</div>
+
+

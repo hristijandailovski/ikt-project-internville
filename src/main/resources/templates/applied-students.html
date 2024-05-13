@@ -1,0 +1,49 @@
+<div class="container p-3" xmlns:th="http://www.w3.org/1999/html">
+  <h2>Applied students</h2>
+  <table class="table mt-4" id="offers">
+    <thead class="thead-dark">
+    <tr>
+      <th>Country</th>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Age</th>
+      <th>Faculty</th>
+      <th>Degree</th>
+      <th>Major</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Offer rows -->
+    <tr th:each="applicant : ${applicants}">
+      <td th:text="${applicant.getCountry()}"></td>
+      <td th:text="${applicant.getName()}"></td>
+      <td th:text="${applicant.getSurname()}"></td>
+      <td th:text="${applicant.getAge()}"></td>
+      <td th:text="${applicant.getFaculty()}"></td>
+      <td th:text="${applicant.getDegree()}"></td>
+      <td th:text="${applicant.getMajor()}"></td>
+      <td th:text="${applicant.getStatus()}"></td>
+      <td class="text-right">
+        <th:block>
+          <a th:if="${userCredentials.getType() == 'member' && applicant.getStatus() == 'waiting'}"
+             class="btn btn-sm btn-success" th:href="@{/offers/{offerId}/applicants/{studentId}(offerId=${applicant.getOfferId()}, studentId=${applicant.getStudentId()})}">
+            <i class="fa fa-trash">Accept</i></a>
+        </th:block>
+        <th:block>
+          <a th:if="${applicant.getStatus() == 'accepted' || applicant.getStatus() == 'ongoing'}"
+             class="btn btn-sm btn-warning"
+             th:href="@{/offers/{offerId}/applicants/{studentId}/update_status(offerId=${applicant.getOfferId()}, studentId=${applicant.getStudentId()})}">
+            <i class="fa fa-trash">Update status</i></a>
+        </th:block>
+      </td>
+    </tr>
+
+
+    </tbody>
+  </table>
+<!--  <a  class="btn btn-sm btn-info" th:href="@{'/offers/'+${pageNumber -1}}"><i class="fa fa-trash">prev</i></a>-->
+<!--  <a  class="btn btn-sm btn-info" th:href="@{'/offers/'+${pageNumber +1}}"><i class="fa fa-trash">next</i></a>-->
+</div>
+

@@ -1,0 +1,32 @@
+<div class="container p-3">
+  <h4>Offer: BLABLABLA</h4>
+  <h5>Total students: 50</h5>
+  <table class="table mt-4" id="offers">
+    <thead class="thead-dark">
+    <tr>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Field of Study</th>
+      <th>Faks</th>
+      <th>Major</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Offer rows -->
+    <tr>
+      <td>Branko</td>
+      <td>Tashev</td>
+      <td>bla</td>
+      <td>bla</td>
+      <td>bla</td>
+      <td>
+        <th:block sec:authorize="hasRole('ROLE_STUDENT')">
+          <!--          <a th:href="@{'/offers/delete/{id}' (id=${product.getId()})}" th:method="DELETE"-->
+          <a class="btn btn-sm btn-success"><i class="fa fa-trash">Accept applicant</i></a>
+        </th:block>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

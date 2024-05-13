@@ -1,0 +1,53 @@
+<div class="container p-3">
+    <h2>Internship Offers</h2>
+    <th:block>
+        <a th:if="${userCredentials.getType() == 'member'}" class="btn btn-xs btn-info p-2" th:href="@{/offers/add-offer}">Add offer</a>
+    </th:block>
+    <table class="table mt-4" id="offers">
+        <thead class="thead-dark">
+        <tr>
+            <th>Country</th>
+            <th>Field of Study</th>
+            <th>Starting Date</th>
+            <th>Length (in weeks)</th>
+            <th>Company Name</th>
+            <th>Action</th>
+<!--            <th:block sec:authorize="hasRole('ROLE_MEMBER')">-->
+<!--                <th>Number of applications</th>-->
+<!--            </th:block>-->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Offer rows -->
+        <tr th:each="offerView : ${offerViews}">
+            <td th:text="${offerView.getCountryName()}">USA</td>
+            <td th:text="${offerView.getFieldOfStudy()}">Computer Science</td>
+            <td th:text="${offerView.getStartingDate()}">June 1, 2023</td>
+            <td th:text="${offerView.getLengthsInWeeks()}">10</td>
+            <td th:text="${offerView.getCompanyName()}">ABC Company</td>
+            <td class="text-right">
+                <th:block sec:authorize="hasRole('ROLE_MEMBER')">
+                    <!--          <form th:action="@{'/offers/{id}/edit-offer' (id=${product.getId()})}">-->
+                    <a th:if="${userCredentials.getType() == 'member'}" class="btn btn-sm btn-info" th:href="@{/offers/{id}/edit-offer(id=${offerView.getOfferId()})}"><i class="fa fa-trash">Edit</i></a>
+                    <!--          </form>-->
+                </th:block>
+                <th:block sec:authorize="hasRole('ROLE_MEMBER')">
+                    <!--          <a th:href="@{'/offers/delete/{id}' (id=${product.getId()})}" th:method="DELETE"-->
+                    <a th:if="${userCredentials.getType() == 'member'}" class="btn btn-sm btn-danger" th:href="@{/offers/{id}/delete-offer(id=${offerView.getOfferId()})}"><i class="fa fa-trash">Delete</i></a>
+                </th:block>
+                <th:block>
+                    <!--          <a th:href="@{'/offers/{id}/delete' (id=${product.getId()})}" th:method="DELETE"-->
+                    <a th:if="${userCredentials.getType() == 'student'}" class="btn btn-sm btn-success" th:href="@{/offers/{id}/apply(id=${offerView.getOfferId()})}"><i class="fa fa-trash">Apply</i></a>
+                    <!--            <a class="btn btn-sm btn-info" th:href="@{'/offers/{id}'}"><i class="fa fa-trash">View offer</i></a>-->
+                    <a class="btn btn-sm btn-info" th:href="@{/offers/{id}/detail-offer(id=${offerView.getOfferId()})}"><i class="fa fa-trash">View offer</i></a>
+                </th:block>
+
+                <a th:if="${userCredentials.getType() == 'member'}" class="btn btn-sm btn-info" th:href="@{/offers/{offerId}/applicants(offerId=${offerView.getOfferId()})}"><i class="fa fa-trash">View applicants</i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a  class="btn btn-sm btn-info" th:href="@{'/offers/'+${pageNumber -1}}"><i class="fa fa-trash">prev</i></a>
+    <a  class="btn btn-sm btn-info" th:href="@{'/offers/'+${pageNumber +1}}"><i class="fa fa-trash">next</i></a>
+</div>
+

@@ -1,0 +1,88 @@
+
+<!--<h1 class="text-center">Create an offer</h1>-->
+<div class="container p-3">
+    <!--    <h4>Company: Bla bla</h4>-->
+        <!--
+            Form for offer should have:
+            - field
+            - requirements
+            - responsibilities
+            - benefits
+            - salary
+            - start date
+            - duration in weeks
+            - select company
+
+
+            TODO: thymeleaf, select dropdown options, i za edit
+         -->
+        <h4>Company info</h4>
+        <div class="form-group">
+            <p class="form-control" th:text="'Country:' + ${offerDetailView.getCountryName()}"></p>
+        </div>
+        <div class="form-group">
+            <p class="form-control" th:text="'Company:' + ${offerDetailView.getCompanyName()}"></p>
+        </div>
+        <h4>Offer info</h4>
+        <div class="form-group">
+            <p  th:text="'Field of study: '+${offerDetailView.getField()}" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <p  th:text="'Requirements: '+${offerDetailView.getRequirements()}" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <p  th:text="'Responsibilities: '+${offerDetailView.getResponsibilities()}" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <p  th:text="'Benefits: '+${offerDetailView.getBenefits()}" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <p  th:text="'Salary: '+${offerDetailView.getSalary()}" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <p th:text="'Start date: '+${offerDetailView.getStartDate()}" class="form-control">
+        </div>
+
+        <div class="form-group">
+
+            <p th:text="'Duration (in weeks): '+${offerDetailView.getDurationInWeeks()}" class="form-control">
+        </div>
+        <h4>Accommodation info</h4>
+        <div class="form-group">
+
+            <p th:text="'Phone: '+${offerDetailView.getAccPhone()}" class="form-control">
+        </div>
+        <div class="form-group">
+
+            <p th:text="'Email: '+${offerDetailView.getAccEmail()}" class="form-control">
+        </div>
+        <div class="form-group">
+
+            <p th:text="'Address: '+${offerDetailView.getAccAddress()}" class="form-control">
+        </div>
+        <div class="form-group">
+
+            <p  th:text="'Description: '+${offerDetailView.getAccDescription()}" class="form-control">
+        </div>
+
+        <!--        <div class="form-group">-->
+        <!--            <label for="field8">Select company:</label>-->
+        <!--            <input type="text" id="field8" name="field8" class="form-control">-->
+        <!--        </div>-->
+
+        <a  class="btn btn-info" href="/offers">&lt; Back</a>
+
+
+</div>
+
+
