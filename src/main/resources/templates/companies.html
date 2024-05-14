@@ -1,0 +1,35 @@
+<div class="container p-3" xmlns:sec="">
+  <h2>Companies</h2>
+  <table class="table mt-4" id="offers">
+    <thead class="thead-dark">
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th>Country</th>
+      <th>Employees Count</th>
+      <th>Offers Count</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Offer rows -->
+    <tr th:each="companyView : ${companiesView}">
+      <td th:text="${companyView.getName()}">Lainmomomwid</td>
+      <td th:text="${companyView.getAddress()}">city: ercotnazuwji street: vinbiifetetzuf number: 0251</td>
+      <td th:text="${companyView.getCountryName()}">Macedonia</td>
+      <td th:text="${companyView.getNumberOfEmployees()}">240</td>
+      <td th:text="${companyView.getOffersCount()}">10</td>
+      <td>
+        <th:block sec:authorize="hasRole('ROLE_MEMBER')">
+          <!--          <a th:href="@{'/offers/delete/{id}' (id=${product.getId()})}" th:method="DELETE"
+          todo: ID-to na company
+          -->
+          <a class="btn btn-sm btn-info" th:href="@{/offers/add-offer}"><i class="fa fa-trash">Add offer</i></a>
+        </th:block>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <a  class="btn btn-sm btn-info" th:href="@{'/companies/'+${pageNumber -1}}"><i class="fa fa-trash">prev</i></a>
+  <a  class="btn btn-sm btn-info" th:href="@{'/companies/'+${pageNumber +1}}"><i class="fa fa-trash">next</i></a>
+</div>
