@@ -1,0 +1,42 @@
+<div class="container p-3" xmlns:th="http://www.w3.org/1999/html">
+    <h2>Give feedback</h2>
+    <hr>
+    <form th:method="POST" th:action="@{'/{id}/give-feedback' (id=${offerId})}">
+        <div class="form-group py-2">
+            <label for="gradeWork">Grade work:</label>
+            <select id="gradeWork" name="gradeWork" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div class="form-group py-2">
+            <label for="gradeAccommodation">Grade accommodation:</label>
+            <select id="gradeAccommodation" name="gradeAccommodation" class="form-select form-select-sm" aria-label=".form-select-sm example">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div class="form-group py-2">
+            <label for="commentByStudent">Comment:</label>
+            <textarea id="commentByStudent" name="commentByStudent" placeholder="Comment:"></textarea>
+        </div>
+
+        <button class="btn btn-success">Submit</button>
+    </form>
+</div>

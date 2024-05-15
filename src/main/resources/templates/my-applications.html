@@ -1,0 +1,42 @@
+<div class="container p-3" xmlns:th="http://www.w3.org/1999/html">
+    <h2>My Applications</h2>
+    <table class="table mt-4" id="offers">
+        <thead class="thead-dark">
+        <tr>
+            <th>Country</th>
+            <th>Field of Study</th>
+            <th>Starting Date</th>
+            <th>Length (in weeks)</th>
+            <th>Company Name</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Offer rows -->
+        <tr th:each="studentApp : ${studentApps}">
+            <td th:text="${studentApp.getCountryName()}"></td>
+            <td th:text="${studentApp.getFieldOfStudy()}"></td>
+            <td th:text="${studentApp.getStartingDate()}"></td>
+            <td th:text="${studentApp.getLengthsInWeeks()}"></td>
+            <td th:text="${studentApp.getCompanyName()}"></td>
+            <td th:text="${studentApp.getStatus()}"></td>
+
+            <td class="text-right">
+
+                <th:block sec:authorize="hasRole('ROLE_STUDENT')">
+                    <!--          <a th:href="@{'/offers/delete/{id}' (id=${product.getId()})}" th:method="DELETE"-->
+                    <a class="btn btn-sm btn-danger" th:href="@{'/applications/cancel/{id}' (id=${studentApp.getOfferId()})}" th:method="POST"><i class="fa fa-trash">Cancel</i></a>
+                </th:block>
+                <th:block>
+                    <a class="btn btn-sm btn-warning" th:href="@{'/{id}/give-feedback' (id=${studentApp.getOfferId()})}"
+                       th:if="${studentApp.getStatus() == 'completed'}">
+                        <i style="color: white">Give feedback</i></a>
+                </th:block>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a  class="btn btn-sm btn-info" th:href="@{'/applications/'+${pageNumber -1}}"><i class="fa fa-trash">prev</i></a>
+    <a  class="btn btn-sm btn-info" th:href="@{'/applications/'+${pageNumber +1}}"><i class="fa fa-trash">next</i></a>
+</div>
