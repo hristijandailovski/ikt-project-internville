@@ -1,38 +1,91 @@
-<!-- Profile view -->
-<!--
-to do: Treba da se prepravi za korektno ispecatuvanje na podatoci
--->
-<div class="container p-3">
-    <h3>My Profile</h3>
-    <a class="btn" href="edit-profile.html">Edit</a>
-    <br>
-    <h3>About me</h3>
-    <div class="form-group">
-        <p class="form-control" id="name" th:text="'Name: ' + ${studentProfileView.getStudentName()}"></p>
-    </div>
-    <div class="form-group">
-        <p class="form-control" id="surname" th:text="'Surname: ' + ${studentProfileView.getStudentSurname()}"></p>
-    </div>
-    <div class="form-group">
-        <p class="form-control" id="Age" th:text="'Age: ' + ${studentProfileView.getStudentAge()}"></p>
-    </div>
-    <div class="form-group">
-        <p class="form-control" id="country" th:text="'Country: ' + ${studentProfileView.getStudentName()}"></p>
-    </div>
-    <br>
-    <h3>Education</h3>
-    <div class="form-group">
-        <p class="form-control" id="degree" th:text="'Degree: ' + ${studentProfileView.getStudentDegree()}"></p>
-    </div>
-    <div class="form-group">
-        <p class="form-control" id="faculty" th:text="'Name: ' + ${studentProfileView.getStudentFaculty()}"></p>
-    </div>
-    <br>
-    <h3>Experience</h3>
-    <a class="btn" href="add-experience.html">Add experience</a>
-    <br>
-    <h3>Projects</h3>
-    <a class="btn" href="add-project.html">Add projects</a>
-    <br>
-    <a class="btn btn-delete" >DELETE</a>
+<div class="container p-2" xmlns:th="http://www.w3.org/1999/html">
+    <th:block th:if="${profile!=null}">
+        <h1>My Profile</h1>
+        <th:block sec:authorize="hasRole('ROLE_STUDENT')">
+            <!--    th:href="@{'/profile/{id}' (id=${student.getId()})}">-->
+            <!--        <a type="submit" class="btn btn-sm btn-info" href="/profile/{id}/edit"><i class="fa fa-trash">Edit</i></a>-->
+            <a type="submit" class="btn btn-sm btn-info" th:href="@{/profile/edit}"><i class="fa fa-trash">Edit</i></a>
+        </th:block>
+        <hr>
+        <div class="profile-section">
+            <h2>About Me</h2>
+            <p th:text="'Name: '+ ${profile.getName()}">Name: John</p>
+            <p th:text="'Surname: '+${profile.getSurname()}">Surname: Doe</p>
+            <p th:text="'Age: '+${profile.getAge()}">Age: 25</p>
+            <p th:text="'Country: '+ ${profile.getCountryName()}">Country: Country</p>
+        </div>
+        <hr>
+        <th:block th:if="${userCredentials.getType().equals('student')}">
+            <div class="profile-section">
+                <h2>Education</h2>
+                <p th:text="'Degree: '+${profile.getDegree()}">Degree: Bachelor of Science in Computer Science</p>
+                <p th:text="'Faculty: '+ ${profile.getFacultyName()}">University: Example University</p>
+                <p th:text="'Year of enrollment: ' + ${profile.getStartYear()}">Graduation Year: 2020</p>
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Experience</h2>
+                <a class="btn btn-xs btn-info" th:href="@{/profile/add-experience}">+</a>
+
+                <!--  TODO: for each -->
+                <th:block th:each="ex : ${experiences}">
+                    <!--            <p th:text="${ex.get.toString()}">Company: ABC Solutions</p>-->
+                    <p th:text="'Job type: ' + ${ex.getJobType()}">Position: Web Developer</p>
+                    <p th:text="'Duration: ' + ${ex.getDurationInWeeks()}">Duration: 2019 - Present</p>
+                    <p th:text="'Description: '+ ${ex.getDescription()}">Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a felis non odio tincidunt scelerisque. Mauris eget turpis magna.</p>
+                    <a class="btn btn-xs btn-danger" th:href="@{'/profile/delete-experience/{exId}' (exId=${ex.getId()})}">delete</a>
+                    <hr>
+                </th:block>
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Projects</h2>
+                <a class="btn btn-xs btn-info" th:href="@{/profile/add-project}">+</a>
+                <th:block th:each="pr : ${projects}">
+                    <p th:text="'Name: ' +${pr.getName()}">Project 1: Example Project</p>
+                    <p th:text="'Description: ' +${pr.getDescription()}">Project 2: Another Project</p>
+                    <p th:text="'Completeness: ' + ${pr.getCompleteness()}">Project 3: Personal Portfolio Website</p>
+                    <a class="btn btn-xs btn-danger"  th:href="@{'/profile/delete-project/{prId}' (prId=${pr.getId()})}">delete</a>
+                    <hr>
+                </th:block>
+
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Certificate</h2>
+                <a class="btn btn-xs btn-info" th:href="@{/profile/add-certificate}">+</a>
+                <th:block th:each="cert : ${certificates}">
+                    <p th:text="'Name: ' +${cert.getName()}">Certificate 1</p>
+                    <p th:text="'Description: ' +${cert.getDescription()}">Certificate 1</p>
+                    <p th:text="'Date of issue: ' + ${cert.getDateOfIssue()}">Certificate 1</p>
+                    <p th:text="'Publisher: ' + ${cert.getPublisher()}">Certificate 1</p>
+                    <a class="btn btn-xs btn-danger"  th:href="@{'/profile/delete-certificate/{crId}' (crId=${cert.getId()})}">delete</a><hr>
+                </th:block>
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Language</h2>
+                <a class="btn btn-xs btn-info" th:href="@{/profile/add-language}">+</a>
+                <th:block th:each="lang : ${languages}">
+                    <p th:text="'Name: ' +${lang.getName()}">Name 1</p>
+                    <p th:text="'Level: ' +${lang.getLevel()}">Level 1</p>
+                    <a class="btn btn-xs btn-danger" th:href="@{'/profile/delete-language/{laId}' (laId=${lang.getId()})}">delete</a>
+                    <hr>
+                </th:block>
+            </div>
+        </th:block>
+        <th:block th:if="${userCredentials.getType().equals('member')}">
+            <div class="profile-section">
+                <h2>Organization and committee</h2>
+                <p  th:text="'Organization: ' +${profile.getOrganizationName()}">Org 1</p>
+                <hr>
+                <p th:text="'Committee country: ' +${profile.getCommCountryName()}"></p>
+                <p th:text="'Committee address: ' +${profile.getCommAddress()}"></p>
+                <p th:text="'Committee phone: ' +${profile.getCommPhoneNumber()}"></p>
+                <p th:text="'Committee email: ' +${profile.getCommEmail()}"></p>
+            </div>
+        </th:block>
+
+    </th:block>
 </div>
+

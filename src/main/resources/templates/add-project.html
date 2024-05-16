@@ -1,11 +1,18 @@
-
-
-<!-- <h1>Add Project</h1>  -->
-<div class="container p-3">
-    <h1 class="text-center">Add a project</h1>
-    <form method="post" th:action="@{applied-students/add-project}">
-        <div class="form-group">
-            <label for="student-id"></label>
+<div class="container p-2">
+    <h3>Add project</h3>
+    <form method="post" th:action="@{'/profile/add-project'}">
+        <div class="form-group py-2">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name"  name="name" placeholder="Enter project name">
         </div>
+        <div class="form-group py-2">
+            <label for="description">Description</label>
+            <input type="text" class="form-control" id="description" name="description" placeholder="Enter project description">
+        </div>
+        <div class="form-group py-2">
+            <label for="completeness">Completeness</label>
+            <input type="range" min="0" max="100" value="0" class="form-control" id="completeness" name="completeness" placeholder="enter 0 .. 100">
+        </div>
+        <button class="btn btn-success">Add</button>
     </form>
 </div>

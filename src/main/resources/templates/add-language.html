@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="container p-2">
+    <h3>Add language</h3>
+    <form method="post" th:action="@{'/profile/add-language'}">
+        <div class="form-group py-2">
+            <label for="lang-id">Language</label>
+            <!--      <input type="text" class="form-control" id="position" placeholder="Enter position name">-->
+            <select id="lang-id" name="lang-id" class="form-control">
+                <option th:each="language: ${languages}" th:value="${language.getId()}" th:text="${language.getName()}">language name</option>
+            </select>
+        </div>
+        <div class="form-group py-2">
+            <label for="level">Level</label>
+            <!--      <input type="text" class="form-control" id="position" placeholder="Enter position name">-->
+            <select id="level" name="level" class="form-control">
+                <option th:each="level: ${langLevels}" th:value="${level.toString()}" th:text="${level.toString()}">language level</option>
+            </select>
+        </div>
+        <button class="btn btn-success">Add</button>
+    </form>
+</div>

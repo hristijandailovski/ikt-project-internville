@@ -1,11 +1,120 @@
-<!-- Go ostavam za na miting, treba da se diskutira dali ke ima razlicni profile view za member ili student ili ke se pravat od istata stranica -->
+<div class="container p-2">
+    <h1>Edit Profile</h1>
+    <th:block th:if="${profile!=null}">
+        <form method="post" th:action="@{'/profile/edit'}">
+            <h3>About me</h3>
+            <div class="form-group py-2">
+                <label for="name">Name</label>
+                <input type="text" class="form-control"name="name" id="name" th:value="${profile.getName()}" placeholder="Enter your name">
+            </div>
+            <div class="form-group py-2">
+                <label for="surname">Surname</label>
+                <input type="text" class="form-control" id="surname" name="surname"  th:value="${profile.getSurname()}" placeholder="Enter your surname">
+            </div>
+            <div class="form-group py-2">
+                <label for="date-of-birth">Date of birth</label>
+                <input type="date" class="form-control" id="date-of-birth" name="date-of-birth"  th:value="${profile.getDateOfBirth()}" placeholder="Enter your surname">
+            </div>
+            <div class="form-group py-2">
+                <p th:text="'Username: '+${profile.getUsername()}"></p>
+                <!--      <label for="username">Username</label>-->
+                <!--      <input type="text" class="form-control" id="username" placeholder="Enter your username">-->
+            </div>
+            <div class="form-group py-2">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" th:value="${profile.getPassword()}" placeholder="Enter your password">
+            </div>
+            <div class="form-group py-2">
+                <label for="address">Address</label>
+                <input type="text"  class="form-control" id="address" name="address" th:value="${profile.getAddress()}" placeholder="Enter your gpa">
+            </div>
+            <div class="form-group py-2">
+                <label for="phone-number">Phone number</label>
+                <input type="text" class="form-control" id="phone-number" name="phone-number" th:value="${profile.getPhoneNumber()}" placeholder="Enter your phone number">
+            </div>
+            <div class="form-group py-2">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" th:value="${profile.getEmail()}" placeholder="Enter your email">
+            </div>
+            <div class="form-group py-2">
+                <label for="country-id">Country</label>
+                <!--      <input type="text" class="form-control" id="position" placeholder="Enter position name">-->
+                <select id="country-id" name="country-id" class="form-control">
+                    <th:block th:each="country: ${countries}">
+                        <option th:if="${country.getId().equals(profile.getCountryId())}" th:value="${country.getId()}" th:text="${country.getName()}" selected>country name</option>
+                        <option th:if="${!country.getId().equals(profile.getCountryId())}" th:value="${country.getId()}" th:text="${country.getName()}" >country name</option>
+                    </th:block>
 
-<div class="container p-3">
-    <form method="post" th:action="@{/profile/{id}/edit-profile(id=${StudentProfileView.})">
-        <h3>My profile</h3>
-        <div class="form-group">
-            <label for="name">Name: </label>
-            <input id="name" name="name" type="text" th:value="${studentProfileView.getStudentName()}" class="form-control">
-        </div>
-    </form>
+                </select>
+            </div>
+            <th:block th:if="${userCredentials.getType().equals('student')}">
+                <h3>Education</h3>
+                <div class="form-group py-2">
+                    <label for="type-of-study">Type of study</label>
+                    <!--      <input type="text" class="form-control" id="position" placeholder="Enter position name">-->
+                    <select id="type-of-study" name="type-of-study" class="form-control">
+                        <th:block th:each="studyType: ${studyTypes}" >
+                            <option  th:if="${studyType.toString().equals(profile.getDegree())}" th:value="${studyType.toString()}" th:text="${studyType.toString()}" selected>study type name</option>
+                            <option  th:if="${!studyType.toString().equals(profile.getDegree())}" th:value="${studyType.toString()}" th:text="${studyType.toString()}">study type name</option>
+                        </th:block>
+
+                    </select>
+                </div>
+                <!--    <div class="form-group py-2">-->
+                <!--      <label for="university">Faculty</label>-->
+                <!--      <input type="text" class="form-control" id="university" placeholder="Enter your university">-->
+                <!--    </div>-->
+                <div class="form-group py-2">
+                    <label for="faculty-id">Faculty</label>
+                    <!--      <input type="text" class="form-control" id="position" placeholder="Enter position name">-->
+                    <select id="faculty-id" name="faculty-id" class="form-control">
+                        <th:block th:each="faculty: ${faculties}">
+                            <option th:if="${faculty.getId().equals(profile.getFacultyId())}" th:value="${faculty.getId()}" th:text="${faculty.getName()}" selected></option>
+                            <option th:if="${!faculty.getId().equals(profile.getFacultyId())}" th:value="${faculty.getId()}" th:text="${faculty.getName()}">faculty name</option>
+                        </th:block>
+
+                    </select>
+                </div>
+                <div class="form-group py-2">
+                    <label for="major-id">Major</label>
+                    <!--      <input type="text" class="form-control" id="position" placeholder="Enter position name">-->
+                    <select id="major-id" name="major-id" class="form-control">
+                        <th:block th:each="major: ${majors}">
+                            <option th:if="${major.getId().equals(profile.getMajorId())}" th:value="${major.getId()}" th:text="${major.getMajor()}" selected>major name</option>
+                            <option  th:if="${!major.getId().equals(profile.getMajorId())}" th:value="${major.getId()}" th:text="${major.getMajor()}" >major name</option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="form-group py-2">
+                    <label for="start-of-studies">Start of studies</label>
+                    <input type="number" min="1970" class="form-control" id="start-of-studies" name="start-of-studies" th:value="${profile.getStartYear()}" placeholder="Enter your graduation year">
+                </div>
+                <div class="form-group py-2">
+                    <label for="credits">ECTS Credits</label>
+                    <input type="number" min="0" max="240" class="form-control" id="credits" name="credits" th:value="${profile.getEctsCredits()}" placeholder="Enter your gpa">
+                </div>
+                <div class="form-group py-2">
+                    <label for="gpa">GPA</label>
+                    <input type="text"  class="form-control" id="gpa" name="gpa" th:value="${profile.getGpa()}" placeholder="Enter your gpa">
+                </div>
+                <br>
+            </th:block>
+            <th:block th:if="${userCredentials.getType().equals('member')}">
+                <div class="profile-section">
+                    <h2>Organization and committee</h2>
+                    <p class="form-group py-2" th:text="'Organization: ' +${profile.getOrganizationName()}">Org 1</p>
+                    <hr>
+                    <p class="form-group py-2" th:text="'Committee country: ' +${profile.getCommCountryName()}"></p>
+                    <p class="form-group py-2" th:text="'Committee address: ' +${profile.getCommAddress()}"></p>
+                    <p class="form-group py-2" th:text="'Committee phone: ' +${profile.getCommPhoneNumber()}"></p>
+                    <p  class="form-group py-2" th:text="'Committee email: ' +${profile.getCommEmail()}"></p>
+                </div>
+            </th:block>
+            <a type="submit" class="btn btn-info" th:href="@{/profile}"><- Back</a>
+            <button type="submit" class="btn btn-danger">Delete My Profile</button>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+    </th:block>
 </div>
+
+
