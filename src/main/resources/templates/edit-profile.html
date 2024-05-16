@@ -1,6 +1,11 @@
-<div class="container p-3">
-    <h3>My profile</h3>
-    <div class="form-group">
+<!-- Go ostavam za na miting, treba da se diskutira dali ke ima razlicni profile view za member ili student ili ke se pravat od istata stranica -->
 
-    </div>
+<div class="container p-3">
+    <form method="post" th:action="@{/profile/{id}/edit-profile(id=${StudentProfileView.})">
+        <h3>My profile</h3>
+        <div class="form-group">
+            <label for="name">Name: </label>
+            <input id="name" name="name" type="text" th:value="${studentProfileView.getStudentName()}" class="form-control">
+        </div>
+    </form>
 </div>
