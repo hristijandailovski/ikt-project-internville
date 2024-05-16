@@ -1,4 +1,4 @@
-package finki.ikt.tim1.internville.controller
+package finki.ikt.tim1.internville.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
