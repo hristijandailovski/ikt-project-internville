@@ -6,27 +6,32 @@ import java.sql.SQLException;
 
 @Data
 public class CompanyView {
-    private String companyName;
-    private int companyNumber;
-    private String companyEmail;
-    private int countryId;
-    private int numberOfEmployees;
+    private Integer id;
+    private String name;
+    private String address;
+    private String countryName;
+    private String numberOfEmployees;
+    private String offersCount;
 
-    public CompanyView(String companyName, int companyNumber, String companyEmail, int countryId, int numberOfEmployees) {
-        this.companyName = companyName;
-        this.companyNumber = companyNumber;
-        this.companyEmail = companyEmail;
-        this.countryId = countryId;
+    public CompanyView(Integer id, String name, String address, String countryName, String numberOfEmployees, String offersCount) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.countryName = countryName;
         this.numberOfEmployees = numberOfEmployees;
+        this.offersCount = offersCount;
     }
 
-    public static CompanyView mapRowToCompanyView(ResultSet rs, int rowNumber) throws SQLException{
+    public static CompanyView  mapRowToCompanyView(ResultSet rs, int rowNum) throws SQLException {
         return new CompanyView(
+                Integer.parseInt(rs.getString("id")),
                 rs.getString("name"),
-                Integer.parseInt(rs.getString("phone_number")),
-                rs.getString("email_adress"),
-                Integer.parseInt(rs.getString("country_id")),
-                Integer.parseInt(rs.getString("number_of_employees"))
+                rs.getString("address"),
+                rs.getString("country_name"),
+                rs.getString("number_of_employees"),
+                rs.getString("offers_count")
         );
     }
+
+
 }

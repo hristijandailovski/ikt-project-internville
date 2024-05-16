@@ -6,27 +6,34 @@ import java.sql.SQLException;
 
 @Data
 public class Company {
-    private String companyName;
-    private int companyNumber;
-    private String companyEmail;
-    private int countryId;
-    private int numberOfEmployees;
+    private Integer id;
+    private String name;
+    private String phoneNumber;
+    private String emailAddress;
+    private String address;
+    private Integer country_id;
+    private String numberOfEmployees;
 
-    public Company(String companyName, int companyNumber, String companyEmail, int countryId, int numberOfEmployees) {
-        this.companyName = companyName;
-        this.companyNumber = companyNumber;
-        this.companyEmail = companyEmail;
-        this.countryId = countryId;
+    public Company(Integer id, String name, String phoneNumber, String emailAddress, String address, Integer country_id, String numberOfEmployees) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
+        this.address = address;
+        this.country_id = country_id;
         this.numberOfEmployees = numberOfEmployees;
     }
 
-    public static Company mapRowToCompany(ResultSet rs, int rowNum) throws SQLException{
+    public static Company mapRowToCompany(ResultSet rs, int rowNum) throws SQLException {
         return new Company(
+                Integer.parseInt(rs.getString("id")),
                 rs.getString("name"),
-                Integer.parseInt(rs.getString("phone_number")),
-                rs.getString("email_adress"),
+                rs.getString("phone_number"),
+                rs.getString("email_address"),
+                rs.getString("address"),
                 Integer.parseInt(rs.getString("country_id")),
-                Integer.parseInt(rs.getString("number_of_employees"))
+                rs.getString("number_of_employees")
         );
     }
 }
+

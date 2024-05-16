@@ -7,11 +7,17 @@ import java.sql.SQLException;
 
 @Data
 public class MemberProfileEditView {
-    private Integer memberId;
+    private Integer id;
+    private String username;
+    private String password;
+
     private String name;
     private String surname;
-    private String age;
-    private String countryName;
+    private String dateOfBirth;
+    private String address;
+    private String phoneNumber;
+    private String email;
+    private Integer countryId;
 
     private String organizationName;
     private String commPhoneNumber;
@@ -19,26 +25,35 @@ public class MemberProfileEditView {
     private String commAddress;
     private String commCountryName;
 
-    public MemberProfileEditView(Integer memberId, String name, String surname, String age, String countryName, String organizationName, String commPhoneNumber, String commEmail, String commAddress, String commCountryName) {
-        this.memberId = memberId;
+    public MemberProfileEditView(Integer studentId, String username, String password, String name, String surname, String dateOfBirth, String address, String phoneNumber, String email, Integer countryId, String organizationName, String commPhoneNumber, String commEmail, String commAddress, String commCountryName) {
+        this.id = studentId;
+        this.username = username;
+        this.password = password;
         this.name = name;
         this.surname = surname;
-        this.age = age;
-        this.countryName = countryName;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.countryId = countryId;
         this.organizationName = organizationName;
         this.commPhoneNumber = commPhoneNumber;
         this.commEmail = commEmail;
         this.commAddress = commAddress;
         this.commCountryName = commCountryName;
     }
-
-    public static MemberProfileEditView mapRowToMemberProfileEditView(ResultSet rs, int rowNum) throws SQLException {
+    public static MemberProfileEditView mapRowToMemberProfileEditView(ResultSet rs,int rowNum) throws SQLException {
         return new MemberProfileEditView(
                 Integer.parseInt(rs.getString("id")),
+                rs.getString("username"),
+                rs.getString("password"),
                 rs.getString("name"),
                 rs.getString("surname"),
-                rs.getString("age"),
-                rs.getString("country_name"),
+                rs.getString("date_of_birth"),
+                rs.getString("address"),
+                rs.getString("phone_number"),
+                rs.getString("email_address"),
+                Integer.parseInt(rs.getString("country_id")),
                 rs.getString("org_name"),
                 rs.getString("comm_phone_number"),
                 rs.getString("comm_email"),
@@ -46,5 +61,4 @@ public class MemberProfileEditView {
                 rs.getString("comm_country_name")
         );
     }
-
 }

@@ -115,7 +115,7 @@ public class MemberRepository {
     }
 
     public Iterable<ApplicantView> findAllApplicantByOffer(Integer offerId) {
-        return jdbc.query("select * from ikt_project.all_applicant_by_offer(?)",ApplicantView::mapRowToApplicant,offerId);
+        return jdbc.query("select * from ikt_project.all_applicant_by_offer(?)",ApplicantView::mapRowToApplicantView,offerId);
 
     }
 
