@@ -219,3 +219,286 @@ create table INTERNSHIP(
                                ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+
+--Procedure for inserting a row into the knows_language table
+CREATE OR REPLACE PROCEDURE ikt_project.insert_or_update_knows_language(
+    p_student_id INTEGER,
+    p_lang_id INTEGER,
+    p_level VARCHAR
+)
+AS $$
+BEGIN
+    -- Check if the language knowledge exists based on the provided student_id and lang_id
+    IF EXISTS (
+        SELECT 1
+        FROM ikt_project.knows_language
+        WHERE student_id = p_student_id
+          AND lang_id = p_lang_id
+    ) THEN
+        -- Update existing language knowledge
+UPDATE ikt_project.knows_language
+SET level = p_level
+WHERE student_id = p_student_id
+  AND lang_id = p_lang_id;
+ELSE
+        -- Insert a new language knowledge
+        INSERT INTO ikt_project.knows_language (student_id, lang_id, level)
+        VALUES (p_student_id, p_lang_id, p_level);
+END IF;
+
+COMMIT;
+END;
+$$ language plpgsql;
+
+--Procedure for inserting a row into the project table
+CREATE OR REPLACE PROCEDURE ikt_project.insert_or_update_project(
+    p_name VARCHAR,
+    p_description VARCHAR,
+    p_completeness VARCHAR,
+    p_student_id INTEGER
+)
+AS $$
+BEGIN
+    -- Check if the project exists based on the provided name
+    IF EXISTS (
+        SELECT 1
+        FROM ikt_project.project
+        WHERE name = p_name
+    ) THEN
+        -- Update existing project
+UPDATE ikt_project.project
+SET description = p_description,
+    completeness = p_completeness,
+    student_id = p_student_id
+WHERE name = p_name;
+ELSE
+        -- Insert a new project
+        INSERT INTO ikt_project.project (name, description, completeness, student_id)
+        VALUES (p_name, p_description, p_completeness, p_student_id);
+END IF;
+
+COMMIT;
+END;
+$$ language plpgsql;
+
+--Procedure for inserting a row in the certificate table
+CREATE OR REPLACE PROCEDURE ikt_project.insert_or_update_certificate(
+    p_name VARCHAR,
+    p_description VARCHAR,
+    p_date_of_issue DATE,
+    p_publisher VARCHAR,
+    p_student_id INTEGER
+)
+AS $$
+BEGIN
+    -- Check if the certificate exists based on the provided name and student_id
+    IF EXISTS (
+        SELECT 1
+        FROM ikt_project.certificate
+        WHERE name = p_name
+          AND student_id = p_student_id
+    ) THEN
+        -- Update existing certificate
+UPDATE ikt_project.certificate
+SET description = p_description,
+    date_of_issue = p_date_of_issue,
+    publisher = p_publisher
+WHERE name = p_name
+  AND student_id = p_student_id;
+ELSE
+        -- Insert a new certificate
+        INSERT INTO ikt_project.certificate (name, description, date_of_issue, publisher, student_id)
+        VALUES (p_name, p_description, p_date_of_issue, p_publisher, p_student_id);
+END IF;
+
+COMMIT;
+END;
+$$ language plpgsql;
+
+
+create or replace procedure ikt_project.student_apply_for_offer(
+    p_student_id integer,
+    p_offer_id integer
+)
+AS $$
+BEGIN
+    if not exists(
+        select 1
+        from ikt_project.applies_for as ap
+        where ap.offer_id = p_offer_id and ap.student_id = p_student_id
+    )
+    then
+        INSERT INTO ikt_project.applies_for (student_id, offer_id, date_of_app_submission, acceptance_status)
+        VALUES (p_student_id, p_offer_id, now(), 1);
+end if;
+COMMIT;
+
+END;
+$$ language plpgsql;
+
+
+create or replace procedure ikt_project.accept_applicant(
+    p_student_id integer,
+    p_offer_id integer
+)
+as $$
+begin
+    -- check if this application exists and if it has status: waiting
+    -- change status in applies_for to 'accepted' for applicant
+    -- change offer.is_active to false
+    -- change status in applies_for to 'rejected' for all other applicants
+
+    if exists(
+        select 1
+        from ikt_project.applies_for
+        where offer_id = p_offer_id and
+            student_id = p_student_id and
+            applies_for.acceptance_status = 1 -- 1 means 'waiting'
+    )
+    then
+        -- change status of the selected applicant to 'accepted'
+update ikt_project.applies_for
+set acceptance_status = 2       -- 2 means 'accepted'
+where offer_id = p_offer_id and
+        student_id = p_student_id;
+
+-- set the offer as not active anymore
+update ikt_project.offer as offer
+set is_active = false
+where offer.id = p_offer_id;
+
+-- reject all other applicants for the offer
+update ikt_project.applies_for
+set acceptance_status = 3       -- 3 means 'rejected'
+where offer_id = p_offer_id and
+    student_id != p_student_id;
+
+end if;
+end;
+$$ language plpgsql;
+
+
+create or replace procedure ikt_project.update_end_user(
+    p_id integer,
+    p_password varchar,
+    p_name varchar,
+    p_surname varchar,
+    p_date_of_birth date,
+    p_address varchar,
+    p_phone_number varchar,
+    p_email_address varchar,
+    p_country_id integer
+)
+AS $$
+BEGIN
+UPDATE ikt_project.end_user
+SET password = p_password,
+    name = p_name,
+    surname = p_surname,
+    date_of_birth = p_date_of_birth,
+    address = p_address,
+    phone_number = p_phone_number,
+    email_address = p_email_address,
+    country_id = p_country_id
+WHERE id = p_id;
+END;
+$$ language plpgsql;
+
+
+create or replace procedure ikt_project.give_feedback (
+    p_student_id integer,
+    p_offer_id integer,
+    p_grade_work integer,
+    p_grade_accommodation integer,
+    p_comment varchar
+)
+AS $$
+BEGIN
+    IF NOT EXISTS(
+        select 1 from ikt_project.internship
+        where applies_for_offer_id = p_offer_id and
+            applies_for_student_id = p_student_id
+    ) THEN
+        INSERT INTO ikt_project.internship (grade_work,
+                                            grade_accommodation,
+                                            comment_student,
+                                            applies_for_student_id,
+                                            applies_for_offer_id)
+        VALUES (p_grade_work, p_grade_accommodation, p_comment, p_student_id, p_offer_id);
+ELSE
+UPDATE ikt_project.internship SET  grade_work=p_grade_work,
+                                   grade_accommodation = p_grade_accommodation,
+                                   comment_student = p_comment
+WHERE applies_for_offer_id = p_offer_id and
+        applies_for_student_id = p_student_id;
+END IF;
+COMMIT;
+
+END
+$$ language plpgsql;
+
+create or replace procedure ikt_project.delete_student(
+    p_user_id integer
+)
+as
+$$
+begin
+    IF EXISTS (
+        SELECT 1
+        FROM ikt_project.student
+        where id = p_user_id
+    )
+    THEN
+delete from ikt_project.internship where applies_for_student_id = p_user_id;
+delete from ikt_project.applies_for where student_id = p_user_id;
+delete from ikt_project.student where id = p_user_id;
+
+END IF;
+end;
+$$ language plpgsql;
+
+-- update status of applicant - from accepted to ongoing, from ongoing to completed
+CREATE OR REPLACE PROCEDURE ikt_project.update_applicant_status(
+    p_offer_id integer,
+    p_student_id integer
+)
+AS $$
+DECLARE
+v_status integer;
+BEGIN
+    -- check if this application exists
+    IF EXISTS(
+        SELECT 1
+        FROM ikt_project.applies_for
+        WHERE offer_id = p_offer_id AND
+            student_id = p_student_id
+    )
+    THEN
+        -- read the acceptance status for later
+SELECT acceptance_status
+FROM ikt_project.applies_for
+WHERE student_id = p_student_id AND
+        offer_id = p_offer_id
+    INTO v_status;
+
+-- change status from accepted to ongoing
+IF v_status = 2 THEN
+UPDATE ikt_project.applies_for
+SET acceptance_status = 4
+WHERE offer_id = p_offer_id AND
+        student_id = p_student_id;
+
+-- change status from ongoing to completed
+ELSIF v_status = 4 THEN
+UPDATE ikt_project.applies_for
+SET acceptance_status = 5
+WHERE offer_id = p_offer_id AND
+        student_id = p_student_id;
+END IF;
+END IF;
+COMMIT;
+END
+$$ LANGUAGE plpgsql;
+
+
+
