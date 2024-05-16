@@ -49,4 +49,7 @@ public class Offer {
                 rs.getString("is_active")
         );
     }
+    public static String mapRowToOfferColumnField(ResultSet rs, int rowNum) throws SQLException {
+        return rs.getString("field");
+    }
 }

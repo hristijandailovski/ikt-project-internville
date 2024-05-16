@@ -71,4 +71,7 @@ public class OfferRepository {
     public OfferEditView findOfferEditByOfferId(Integer offerId) {
         return jdbc.queryForObject("select * from ikt_project.offer_edit_view(?)",OfferEditView::mapRowToOfferEditView,offerId);
     }
+    public Iterable<String> findAllOfferFields() {
+        return jdbc.query("select distinct field from ikt_project.offer order by field asc", Offer::mapRowToOfferColumnField);
+    }
 }

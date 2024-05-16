@@ -28,8 +28,15 @@ public class GlobalRepository {
     public Iterable<OfferShortView> findAllActiveOffers(Integer pageNumber){
         return jdbc.query("select * from ikt_project.active_offers(?)", OfferShortView::mapRowToOfferView,pageNumber);
     }
+    public Iterable<OfferShortView> findAllActiveOffersFiltered(Integer pageNum, OffersFilter filter) {
+        return jdbc.query("select * from ikt_project.active_offers_with_filter(?,?,?,?,?,?)", OfferShortView::mapRowToOfferView,
+                filter.getCountryId(),filter.getField(),filter.getStartDate()!=null ? filter.getStartDate().toString() : null,filter.getOrderType(),filter.getOrderCriteria(),pageNum);
+    }
     public Iterable<CompanyView> findAllCompaniesViewOnPage(Integer pageNumber){
         return jdbc.query("select * from ikt_project.companies_view_on_page(?)",CompanyView::mapRowToCompanyView,pageNumber);
+    }
+    public Iterable<CompanyView> findAllCompaniesViewOnPageFiltered(Integer pageNumber,Integer filterType,Integer filterCriteria,Integer countryId){
+        return jdbc.query("select * from ikt_project.companies_view_on_page_with_filter(?,?,?,?)",CompanyView::mapRowToCompanyView,pageNumber,filterType,filterCriteria,countryId);
     }
 
     public Offer findOfferById(Integer id) {

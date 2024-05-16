@@ -548,3 +548,243 @@ end;
 $$ language plpgsql;
 
 
+create or replace function ikt_project.companies_view_on_page_with_filter(
+    p_page_number integer,
+    p_filter_type_number integer,
+    p_filter_column_number integer,
+    p_filter_country_id integer
+)
+    returns table
+            (
+                id                  integer,
+                name                varchar,
+                address             ikt_project.address,
+                country_name        varchar,
+                number_of_employees ikt_project.pos_int,
+                offers_count        bigint
+            )
+as
+$$
+declare
+v_page_number            integer = p_page_number;
+    v_filter_type            text    = 'desc';
+    v_filter_column_name     text    = 'offers_count';
+    v_where_condition_string text    = '';
+begin
+
+    if p_filter_country_id > 0 then -- if it is < 0 that means WHERE clause is not present in final query
+        v_where_condition_string = format('where cou.id = %s ', p_filter_country_id);
+end if;
+    if v_page_number < 1 then
+        v_page_number = 1;
+end if;
+
+    --define ordering of the query, if it is not 0 or 1, then the default value is same as declared above
+    if p_filter_type_number = 0 then
+        v_filter_type = 'asc';
+    elsif p_filter_type_number = 1 then
+        v_filter_type = 'desc';
+end if;
+
+    --define the ordering column, if it has invalid value then the init value will be used, see declaration above
+    if p_filter_column_number = 0 then
+        v_filter_column_name = 'com.name';
+    elsif p_filter_column_number = 1 then
+        v_filter_column_name = 'cou.name';
+    elsif p_filter_column_number = 2 then
+        v_filter_column_name = 'com.number_of_employees';
+    elsif p_filter_column_number = 3 then
+        v_filter_column_name = 'offers_count';
+end if;
+
+return query execute format('
+        select com.id, com.name, com.address, cou.name, com.number_of_employees, count(*) as offers_count
+        from ikt_project.company as com
+                 join ikt_project.country as cou on com.country_id = cou.id
+                 join ikt_project.offer as of on of.company_id = com.id %s group by com.id, com.name, com.address, cou.name, com.number_of_employees
+        order by %s %s
+        limit 20 offset (%s - 1) * 20',
+                                v_where_condition_string, v_filter_column_name, v_filter_type, v_page_number
+                         );
+end;
+$$ language plpgsql;
+
+
+
+create or replace function ikt_project.active_offers_with_filter(
+    p_filter_country_id integer,
+    p_filter_field varchar,
+    p_filter_starting_date varchar,
+    p_filter_type integer,
+    p_filter_criteria integer,
+    p_page_number integer
+)
+    returns table
+            (
+                offer_id          integer,
+                country_name      varchar,
+                field             varchar,
+                start_date        date,
+                duration_in_weeks ikt_project.pos_int,
+                company_name      varchar
+            )
+as
+$$
+declare
+v_page_number                   integer = p_page_number;
+    v_filter_type                   varchar = 'desc';
+    v_filter_criteria               varchar = 'o.start_date';
+    v_where_condition_country       varchar = '';
+    v_where_condition_field         varchar = '';
+    v_where_condition_starting_date varchar;
+
+
+begin
+    if v_page_number < 1 then
+        v_page_number = 1;
+end if;
+    --define ordering of the query, if it is not 0 or 1, then the default value is same as declared above
+    if p_filter_type = 0 then
+        v_filter_type = 'asc';
+    elsif p_filter_type = 1 then
+        v_filter_type = 'desc';
+end if;
+    if p_filter_country_id > 0 then
+        v_where_condition_country = format('cou.id = %s ', p_filter_country_id);
+else
+        v_where_condition_country = 'true';
+end if;
+
+    if p_filter_field is not null then
+        v_where_condition_field = format('o.field = ''%s'' ', p_filter_field);
+else
+        v_where_condition_field = 'true';
+end if;
+
+    if p_filter_starting_date is not null then
+        v_where_condition_starting_date = format('o.start_date > ''%s'' ', p_filter_starting_date);
+else
+        v_where_condition_starting_date = 'true';
+end if;
+
+    --define the ordering column, if it has invalid value then the init value will be used, see declaration above
+    if p_filter_criteria = 0 then
+        v_filter_criteria = 'cou.name';
+    elsif p_filter_criteria = 1 then
+        v_filter_criteria = 'o.field';
+    elsif p_filter_criteria = 2 then
+        v_filter_criteria = 'o.start_date';
+    elsif p_filter_criteria = 3 then
+        v_filter_criteria = 'o.duration_in_weeks';
+    elsif p_filter_criteria = 4 then
+        v_filter_criteria = 'com.name';
+end if;
+
+return query execute format(
+            'select o.id     as offer_id,
+                   cou.name as country_name,
+                   o.field,
+                   o.start_date,
+                   o.duration_in_weeks,
+                   com.name as company_name
+            from ikt_project.offer as o
+                     join ikt_project.company as com on o.company_id = com.id
+                     join ikt_project.country as cou on com.country_id = cou.id
+            where o.is_active = true and %s and %s and %s
+            order by %s %s
+            limit 20 offset (%s - 1) * 20;'
+        , v_where_condition_country, v_where_condition_field, v_where_condition_starting_date,
+            v_filter_criteria, v_filter_type, v_page_number);
+end
+$$ language plpgsql;
+
+
+create or replace function ikt_project.offers_created_by_member_with_filter(
+    p_member_id integer,
+    p_filter_country_id integer,
+    p_filter_field varchar,
+    p_filter_starting_date varchar,
+    p_filter_type integer,
+    p_filter_criteria integer,
+    p_page_number integer
+)
+    returns table
+            (
+                offer_id          integer,
+                country_name      varchar,
+                field             varchar,
+                start_date        date,
+                duration_in_weeks ikt_project.pos_int,
+                company_name      varchar
+            )
+as
+$$
+declare
+v_page_number                   integer = p_page_number;
+    v_filter_type                   varchar = 'desc';
+    v_filter_criteria               varchar = 'o.start_date';
+    v_where_condition_country       varchar = '';
+    v_where_condition_field         varchar = '';
+    v_where_condition_starting_date varchar;
+begin
+    if v_page_number < 1 then
+        v_page_number = 1;
+end if;
+
+    --define ordering of the query, if it is not 0 or 1, then the default value is same as declared above
+    if p_filter_type = 0 then
+        v_filter_type = 'asc';
+    elsif p_filter_type = 1 then
+        v_filter_type = 'desc';
+end if;
+    if p_filter_country_id > 0 then
+        v_where_condition_country = format('cou.id = %s ', p_filter_country_id);
+else
+        v_where_condition_country = 'true';
+end if;
+
+    if p_filter_field is not null then
+        v_where_condition_field = format('o.field = ''%s'' ', p_filter_field);
+else
+        v_where_condition_field = 'true';
+end if;
+
+    if p_filter_starting_date is not null then
+        v_where_condition_starting_date = format('o.start_date > ''%s'' ', p_filter_starting_date);
+else
+        v_where_condition_starting_date = 'true';
+end if;
+
+    --define the ordering column, if it has invalid value then the init value will be used, see declaration above
+    if p_filter_criteria = 0 then
+        v_filter_criteria = 'cou.name';
+    elsif p_filter_criteria = 1 then
+        v_filter_criteria = 'o.field';
+    elsif p_filter_criteria = 2 then
+        v_filter_criteria = 'o.start_date';
+    elsif p_filter_criteria = 3 then
+        v_filter_criteria = 'o.duration_in_weeks';
+    elsif p_filter_criteria = 4 then
+        v_filter_criteria = 'com.name';
+end if;
+
+return query execute format(
+        'select o.id     as offer_id,
+               cou.name as country_name,
+               o.field,
+               o.start_date,
+               o.duration_in_weeks,
+               com.name as company_name
+        from ikt_project.offer as o
+                 join ikt_project.company as com on o.company_id = com.id
+                 join ikt_project.country as cou on com.country_id = cou.id
+        where o.member_id = %s and %s and %s and %s
+        order by %s %s
+        limit 20 offset (%s - 1) * 20;',
+        p_member_id,v_where_condition_country, v_where_condition_field, v_where_condition_starting_date,
+        v_filter_criteria, v_filter_type, v_page_number);
+
+end;
+$$ language plpgsql;
+
+

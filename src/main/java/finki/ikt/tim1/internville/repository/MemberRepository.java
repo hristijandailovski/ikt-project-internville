@@ -82,7 +82,11 @@ public class MemberRepository {
     public Iterable<OfferShortView> findAllOffersByMember(Integer memberId,Integer pageNumber){
         return jdbc.query("select * from ikt_project.offers_created_by_member(?,?)",OfferShortView::mapRowToOfferView,memberId,pageNumber);
     }
+    public Iterable<OfferShortView> findAllOffersByMemberFiltered(Integer id, Integer pageNum, OffersFilter filter) {
+        return jdbc.query("select * from ikt_project.offers_created_by_member_with_filter(?,?,?,?,?,?,?)", OfferShortView::mapRowToOfferView,id,
+                filter.getCountryId(),filter.getField(),filter.getStartDate() == null ? null : filter.getStartDate().toString(),filter.getOrderType(),filter.getOrderCriteria(),pageNum);
 
+    }
     public MemberProfileView findProfileByMemberId(Integer memberId) {
         return jdbc.queryForObject("select * from ikt_project.member_profile_view(?)",MemberProfileView::mapRowToMemberProfileView,memberId);
     }

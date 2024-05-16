@@ -1,5 +1,31 @@
 <div class="container p-3" xmlns:sec="">
   <h2>Companies</h2>
+  <form method="post" th:action="@{/companies}">
+    <label for="country-select">
+      Filter by country:
+    </label>
+    <select id="country-select" name="country-id">
+      <option th:each="country : ${countries}" th:value="${country.getId()}"
+              th:text="${country.getName()}" th:selected="${filter != null } ? ${filter.getCountryId() == country.getId()} :${country.getId() == 1}"></option>
+    </select>
+    <label for="order-criteria">
+      Order by:
+    </label>
+    <select id="order-criteria" name="order-criteria">
+      <option value="0" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 0} : ${false}">Name</option>
+      <option value="1" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 1} : ${false}">Country</option>
+      <option value="2" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 2} : ${false}">Number of employees</option>
+      <option value="3" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 3} : ${true}" >Total orders</option>
+    </select>
+    <label for="order-type">
+      Order type:
+    </label>
+    <select id="order-type" name="order-type">
+      <option value="0" th:selected="${filter != null } ? ${filter.getOrderType() == 0} : ${false}">Ascending</option>
+      <option value="1" th:selected="${filter != null } ? ${filter.getOrderType() == 1} : ${true}" >Descending</option>
+    </select>
+    <button class="btn btn-sm btn-info" type="submit">filter</button>
+  </form>
   <table class="table mt-4" id="offers">
     <thead class="thead-dark">
     <tr>

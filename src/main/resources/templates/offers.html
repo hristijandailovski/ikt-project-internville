@@ -1,5 +1,46 @@
 <div class="container p-3">
     <h2>Internship Offers</h2>
+    <form method="post" th:action="@{/offers}">
+        <label for="country-select">
+            Filter by country:
+        </label>
+        <select id="country-select" name="country-id">
+            <option value="-1" th:selected="${filter == null}">all</option>
+            <option th:each="country : ${countries}" th:value="${country.getId()}"
+                    th:text="${country.getName()}" th:selected="${filter != null && filter.getCountryId() == country.getId() }"></option>
+        </select>
+        <label for="field-select">
+            Filter by field of study:
+        </label>
+        <select id="field-select" name="field">
+            <option value="all" th:selected="${filter == null}">all</option>
+            <option th:each="field,status : ${fields}" th:value="${field}"
+                    th:text="${field}" th:selected="${filter != null && filter.getField() == field }"></option>
+        </select>
+        <label for="start-date">
+            Filter from date:
+        </label>
+        <input id="start-date" type="date" name="start-date">
+        <br>
+        <label for="order-criteria">
+            Order by:
+        </label>
+        <select id="order-criteria" name="order-criteria">
+            <option value="0" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 0} : ${false}">Country</option>
+            <option value="1" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 1} : ${false}">Field of study</option>
+            <option value="2" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 2} : ${true}">Start date</option>
+            <option value="3" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 3} : ${false}" >Duration in weeks</option>
+            <option value="4" th:selected="${filter != null } ? ${filter.getOrderCriteria() == 4} : ${false}" >Company's name</option>
+        </select>
+        <label for="order-type">
+            Order type:
+        </label>
+        <select id="order-type" name="order-type">
+            <option value="0" th:selected="${filter != null } ? ${filter.getOrderType() == 0} : ${false}">Ascending</option>
+            <option value="1" th:selected="${filter != null } ? ${filter.getOrderType() == 1} : ${true}" >Descending</option>
+        </select>
+        <button class="btn btn-sm btn-info" type="submit">filter</button>
+    </form>
     <th:block>
         <a th:if="${userCredentials.getType() == 'member'}" class="btn btn-xs btn-info p-2" th:href="@{/offers/add-offer}">Add offer</a>
     </th:block>
