@@ -18,8 +18,8 @@
     <!-- Offer rows -->
     <tr th:each="applicant : ${applicants}">
       <td th:text="${applicant.getCountry()}"></td>
-      <td th:text="${applicant.getName()}"></td>
-      <td th:text="${applicant.getSurname()}"></td>
+      <td ><a th:text="${applicant.getName()}" th:href="@{/profile/view-profile/{studentId}(studentId=${applicant.getStudentId()})}"></a></td>
+      <td ><a th:text="${applicant.getSurname()}" th:href="@{/profile/view-profile/{studentId}(studentId=${applicant.getStudentId()})}"></a></td>
       <td th:text="${applicant.getAge()}"></td>
       <td th:text="${applicant.getFaculty()}"></td>
       <td th:text="${applicant.getDegree()}"></td>

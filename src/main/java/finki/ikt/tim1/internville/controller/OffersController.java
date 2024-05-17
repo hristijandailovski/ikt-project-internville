@@ -154,15 +154,19 @@ public class OffersController {
         return "redirect:/offers";
     }
 
-    @GetMapping("/add-offer")
-    public String addOfferPage(Model model, HttpSession session) {
+    @GetMapping(value ={"/add-offer","{id}/add-offer"})
+    public String addOfferPage(@PathVariable(required = false) Integer id, Model model, HttpSession session) {
         //Samo member mozhe da pristapi na ovoj method
         UserCredentials userCredentials = (UserCredentials) session.getAttribute("userCredentials");
         if (!userCredentials.getType().equals("member"))
             return "redirect:/offers";
-
-        Iterable<Company> companies = this.globalRepository.findAllCompanies();
-        model.addAttribute("companies", companies);
+        if(id != null) {
+            Company company = this.globalRepository.findCompanyById(id);
+            model.addAttribute("company",company);
+        }else{
+            Iterable<Company> companies = this.globalRepository.findAllCompanies();
+            model.addAttribute("companies",companies);
+        }
         model.addAttribute("userCredentials", userCredentials);
         model.addAttribute("bodyContent", "add-offer");
         return "master-template";

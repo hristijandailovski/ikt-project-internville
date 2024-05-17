@@ -4,7 +4,11 @@
     <h1 class="text-center">Create an offer</h1>
 <!--    <h4>Company: Bla bla</h4>-->
     <form method="post" th:action="@{/offers/add-offer}">
-        <div class="form-group">
+        <div th:if="${company != null}" class="form-group">
+            <label for="com-id" th:text="'Company: ' + ${company.getName()}"></label>
+            <input class="form-control" type="hidden" name="company-id" id="com-id" th:value="${company.getId()}">
+        </div>
+        <div th:if="${companies != null}" class="form-group">
             <label for="company-id">Company:</label>
             <select id="company-id" name="company-id" class="form-control">
                 <option th:each="com: ${companies}" th:value="${com.getId()}" th:text="${com.getName()}"></option>

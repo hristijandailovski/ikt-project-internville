@@ -46,6 +46,9 @@ public class GlobalRepository {
     public Iterable<Company> findAllCompanies() {
         return jdbc.query("select * from ikt_project.company",Company::mapRowToCompany);
     }
+    public Company findCompanyById(Integer id) {
+        return jdbc.queryForObject("select * from ikt_project.company as com where com.id = ? ",Company::mapRowToCompany,id);
+    }
 
     public UserCredentials findUserCredentialsByUserNameAndPassword(String username, String password) {
         return jdbc.queryForObject("select * from ikt_project.find_user_credentials_with_username_and_password(?,?)"
@@ -59,4 +62,6 @@ public class GlobalRepository {
     public Iterable<Country> findAllCountriesThatHaveCommittesByOrganization(Integer orgId) {
         return jdbc.query("select * from ikt_project.countries_of_committees_by_organization(?)",Country::mapRowToCountry,orgId);
     }
+
+
 }

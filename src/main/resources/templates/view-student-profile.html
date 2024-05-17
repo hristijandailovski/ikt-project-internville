@@ -1,0 +1,66 @@
+<div class="container p-2" xmlns:th="http://www.w3.org/1999/html">
+    <th:block th:if="${profile!=null}">
+        <h1 th:text="${profile.getName()} + ' ' + ${profile.getSurname()} + '\'s profile' ">My Profile</h1>
+        <hr>
+        <div class="profile-section">
+            <h2>About Me</h2>
+            <p th:text="'Name: '+ ${profile.getName()}">Name: John</p>
+            <p th:text="'Surname: '+${profile.getSurname()}">Surname: Doe</p>
+            <p th:text="'Age: '+${profile.getAge()}">Age: 25</p>
+            <p th:text="'Country: '+ ${profile.getCountryName()}">Country: Country</p>
+        </div>
+        <hr>
+        <th:block th:if="${userCredentials.getType().equals('member')}">
+            <div class="profile-section">
+                <h2>Education</h2>
+                <p th:text="'Degree: '+${profile.getDegree()}">Degree: Bachelor of Science in Computer Science</p>
+                <p th:text="'Faculty: '+ ${profile.getFacultyName()}">University: Example University</p>
+                <p th:text="'Year of enrollment: ' + ${profile.getStartYear()}">Graduation Year: 2020</p>
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Experience</h2>
+
+                <!--  TODO: for each -->
+                <th:block th:each="ex : ${experiences}">
+                    <!--            <p th:text="${ex.get.toString()}">Company: ABC Solutions</p>-->
+                    <p th:text="'Job type: ' + ${ex.getJobType()}">Position: Web Developer</p>
+                    <p th:text="'Duration: ' + ${ex.getDurationInWeeks()}">Duration: 2019 - Present</p>
+                    <p th:text="'Description: '+ ${ex.getDescription()}">Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a felis non odio tincidunt scelerisque. Mauris eget turpis magna.</p>
+                    <hr>
+                </th:block>
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Projects</h2>
+                <th:block th:each="pr : ${projects}">
+                    <p th:text="'Name: ' +${pr.getName()}">Project 1: Example Project</p>
+                    <p th:text="'Description: ' +${pr.getDescription()}">Project 2: Another Project</p>
+                    <p th:text="'Completeness: ' + ${pr.getCompleteness()}">Project 3: Personal Portfolio Website</p>
+                    <hr>
+                </th:block>
+
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Certificate</h2>
+                <th:block th:each="cert : ${certificates}">
+                    <p th:text="'Name: ' +${cert.getName()}">Certificate 1</p>
+                    <p th:text="'Description: ' +${cert.getDescription()}">Certificate 1</p>
+                    <p th:text="'Date of issue: ' + ${cert.getDateOfIssue()}">Certificate 1</p>
+                    <p th:text="'Publisher: ' + ${cert.getPublisher()}">Certificate 1</p>
+                </th:block>
+            </div>
+            <hr>
+            <div class="profile-section">
+                <h2>Language</h2>
+                <th:block th:each="lang : ${languages}">
+                    <p th:text="'Name: ' +${lang.getName()}">Name 1</p>
+                    <p th:text="'Level: ' +${lang.getLevel()}">Level 1</p>
+                    <hr>
+                </th:block>
+            </div>
+        </th:block>
+    </th:block>
+</div>
+

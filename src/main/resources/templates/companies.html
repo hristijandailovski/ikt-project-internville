@@ -46,12 +46,12 @@
       <td th:text="${companyView.getNumberOfEmployees()}">240</td>
       <td th:text="${companyView.getOffersCount()}">10</td>
       <td>
-        <th:block sec:authorize="hasRole('ROLE_MEMBER')">
+
           <!--          <a th:href="@{'/offers/delete/{id}' (id=${product.getId()})}" th:method="DELETE"
           todo: ID-to na company
           -->
-          <a class="btn btn-sm btn-info" th:href="@{/offers/add-offer}"><i class="fa fa-trash">Add offer</i></a>
-        </th:block>
+          <a class="btn btn-sm btn-info" th:href="@{'/offers/' + ${companyView.getId()} + '/add-offer'}"><i class="fa fa-trash">Add offer</i></a>
+
       </td>
     </tr>
     </tbody>

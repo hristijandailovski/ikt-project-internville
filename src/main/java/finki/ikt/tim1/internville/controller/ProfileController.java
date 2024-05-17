@@ -254,5 +254,26 @@ public class ProfileController {
         this.studentRepository.deleteExperience(exId);
         return "redirect:/profile";
     }
+    @GetMapping("/view-profile/{studentId}")
+    public String viewStudentProfileAsMember(@PathVariable Integer studentId,HttpSession session, Model model){
+        UserCredentials userCredentials = (UserCredentials) session.getAttribute("userCredentials");
+        //samo za member
+        if(!userCredentials.getType().equals("member"))
+            return "redirect:/profile";
+        StudentProfileView studentProfileView = this.studentRepository.findProfileByStudentId(studentId);
+        Iterable<Project> projects = this.studentRepository.findAllProjectsByStudentId(studentId);
+        Iterable<Experience> experiences = this.studentRepository.findAllExperiencesByStudentId(studentId);
+        Iterable<Certificate> certificates = this.studentRepository.findAllCertificatesByStudentId(studentId);
+        Iterable<LanguageView> languages = this.studentRepository.findAllLanguagesByStudentId(studentId);
+        model.addAttribute("profile",studentProfileView);
+        model.addAttribute("projects",projects);
+        model.addAttribute("experiences",experiences);
+        model.addAttribute("certificates",certificates);
+        model.addAttribute("languages",languages);
+        model.addAttribute("userCredentials",userCredentials);
+        model.addAttribute("bodyContent", "view-student-profile");
+        return "master-template";
+
+    }
 
 }
