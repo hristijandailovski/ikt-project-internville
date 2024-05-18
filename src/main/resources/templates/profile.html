@@ -10,6 +10,7 @@
         <div class="profile-section">
             <h2>About Me</h2>
             <img th:src="@{/photos/DefaultProfilePicture.png}" alt="Photo of profile" style="height:256px; width:256px">
+            <br>
             <button class="btn btn-info">Change Photo</button>
             <button class="btn btn-danger">Delete Photo</button>
             <p th:text="'Name: '+ ${profile.getName()}">Name: John</p>
